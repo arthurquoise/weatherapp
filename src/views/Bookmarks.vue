@@ -1,14 +1,14 @@
 <template>
     <ion-page>
-        <Navbar v-if="cities.length>0" :title="'bookmarks'">
+        <Navbar :title="'bookmarks'">
         </Navbar>
 
         <ion-button>
             <ion-icon slot="icon-only" :icon="arrowUndo"></ion-icon>
         </ion-button>
 
-        <ion-content>
-            <BookmarkedElement :city="'Dainville'" :tempMorning="'12,5°C'" :tempAfternoon="'21,5°C'">
+        <ion-content v-if="cities.length>0">
+            <BookmarkedElement v-for="(city,index) in cities" :key="index" :city="city.name" :tempMorning="'12,5°C'" :tempAfternoon="'21,5°C'">
             </BookmarkedElement>
         </ion-content>
     </ion-page>
@@ -55,6 +55,9 @@
         },
         firestore: {
             cities : db.collection('cities'),
+        },
+        mounted(){
+            
         }
     })
 
