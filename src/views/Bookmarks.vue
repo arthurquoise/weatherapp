@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Navbar v-if="cities.length>0" :title="cities[0].name">
+        <Navbar v-if="cities.length>0" :title="'bookmarks'">
         </Navbar>
 
         <ion-button>
@@ -53,13 +53,8 @@
         setup() {
             return arrowUndo
         },
-        mounted() {
-        db.collection('cities')
-            .get()
-            .then(querySnapshot => {
-                const data = querySnapshot.docs.map(doc => doc.data())
-                this.cities = data;
-            })
+        firestore: {
+            cities : db.collection('cities'),
         }
     })
 
