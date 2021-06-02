@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Navbar :title="'Arras'">
+        <Navbar :title="cities[0].name">
         </Navbar>
 
         <ion-button>
@@ -22,14 +22,18 @@
         IonButton
     } from '@ionic/vue'
 
-
-    import { defineComponent } from 'vue';
+    import firebase from 'firebase/app'
+    import 'firebase/firestore'
+    import { DATABASE_CONFIGURATION } from '@/config.js';
 
     import Navbar from './Navbar';
-
     import BookmarkedElement from "@/views/BookmarkedElement";
 
     import {arrowUndo} from 'ionicons/icons';
+
+    import { defineComponent } from 'vue';
+
+    export const db = firebase.initializeApp(DATABASE_CONFIGURATION).firestore()
 
     export default defineComponent ({
         name: "Bookmarks",
@@ -41,8 +45,23 @@
             Navbar,
             BookmarkedElement
         },
+        data(){
+            return {
+                cities : []
+            }
+        },
         setup() {
             return arrowUndo
+        },
+        mounted() {
+        db.collection('cities')
+            .get()
+            .then(querySnapshot => {
+                const data = querySnapshot.docs.map(doc => doc.data())
+                this.cities = data;
+                console.log(this.cities);
+                console.log(data);
+            })
         }
     })
 

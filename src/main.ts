@@ -4,7 +4,7 @@ import router from './router';
 
 import { IonicVue } from '@ionic/vue';
 
-import firebase from "firebase";
+import { firestorePlugin } from 'vuefire'
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -25,25 +25,12 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDpH0eqSLTfcuMbNnk4woALLGVJzvMIo4M",
-  authDomain: "weatherapp-b6f7b.firebaseapp.com",
-  projectId: "weatherapp-b6f7b",
-  storageBucket: "weatherapp-b6f7b.appspot.com",
-  messagingSenderId: "521176778891",
-  appId: "1:521176778891:web:5fd0ee7b4ad1c131326c8e",
-  measurementId: "G-YE82BHMBEL"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
-  
+
+app.use(firestorePlugin)
+
 router.isReady().then(() => {
   app.mount('#app');
 });
