@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <Navbar :title="cities[0].name">
+        <Navbar v-if="cities.length>0" :title="cities[0].name">
         </Navbar>
 
         <ion-button>
@@ -59,8 +59,6 @@
             .then(querySnapshot => {
                 const data = querySnapshot.docs.map(doc => doc.data())
                 this.cities = data;
-                console.log(this.cities);
-                console.log(data);
             })
         }
     })
