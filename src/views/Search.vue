@@ -1,5 +1,5 @@
 <template>
-    <navbar :title="Add">
+    <navbar :title="'Add'">
     </navbar>
     <!-- Default Searchbar -->
     <ion-searchbar @ionChange=onChange></ion-searchbar>
@@ -40,6 +40,7 @@
                 this.city = e.detail.value;
             },
             async addCity(){
+                //Insert city in database
                 this.currentWeather = await weatherService.getCityName(this.city);
                 if(this.currentWeather.cod === '200'){
                     db.collection('cities')

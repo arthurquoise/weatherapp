@@ -1,11 +1,14 @@
 <template>
     <ion-page>
         <Navbar :title="'bookmarks'"> </Navbar>
-        <ion-button>
-            <ion-icon slot="icon-only"></ion-icon>
-        </ion-button>
+        <a href="/Main">
+            <ion-button>
+                <ion-icon slot="icon-only" :icon="home"></ion-icon>
+            </ion-button>
+        </a>
         <ion-content v-if="cities.length > 0">
             <BookmarkedElement
+                    @clicked="refresh"
                     v-for="(city, index) in cities"
                     :key="index"
                     :city="city.name"
@@ -25,6 +28,7 @@
     import BookmarkedElement from "@/views/BookmarkedElement";
     import { defineComponent } from "vue";
     import weatherService from "@/services/weatherService";
+    import { home } from 'ionicons/icons';
 
     if (firebase.apps.length === 0) {
         firebase.initializeApp(DATABASE_CONFIGURATION);
@@ -47,7 +51,13 @@
                 cities: [],
             };
         },
+        setup(){
+            return {
+                home
+            }
+        },
         async mounted() {
+            //API call and insertion in a table
             db.collection("cities")
                 .get()
                 .then(async (querySnapshot) => {
@@ -58,14 +68,14 @@
                             currentWeather: await weatherService.getCityName(city.name),
                         });
                     });
-                });
+                })
         },
-
-        methods: {
-            update(){
-                this.$forceUpdate();
-            }
-        }
+         methods:{
+            //Doesn't work -> this should refresh the components
+             refresh(){
+                 this.$forceUpdate
+             }
+         }
     });
 </script>
 <style scoped>

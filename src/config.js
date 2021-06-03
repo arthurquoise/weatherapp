@@ -1,9 +1,9 @@
 export const DATABASE_CONFIGURATION = {
-    apiKey: "AIzaSyDpH0eqSLTfcuMbNnk4woALLGVJzvMIo4M",
-    authDomain: "weatherapp-b6f7b.firebaseapp.com",
-    projectId: "weatherapp-b6f7b",
-    storageBucket: "weatherapp-b6f7b.appspot.com",
-    messagingSenderId: "521176778891",
-    appId: "1:521176778891:web:5fd0ee7b4ad1c131326c8e",
-    measurementId: "G-YE82BHMBEL"
+    apiKey: "AIzaSyDNC7WPAJ22BmxeF2qoNF9LEVf9w4KhsOs",
+    authDomain: "weatherapp-amoi.firebaseapp.com",
+    projectId: "weatherapp-amoi",
+    storageBucket: "weatherapp-amoi.appspot.com",
+    messagingSenderId: "722543496109",
+    appId: "1:722543496109:web:74bcee5f63b12c30c8af24",
+    measurementId: "G-K80SDYPTL7"
 }

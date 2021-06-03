@@ -1,16 +1,10 @@
 <template>
     <ion-page>
         <!-- Navbar -->
-        <navbar :title="'Dainville'">
+        <navbar v-if="currentWeather!== null" :title="currentWeather.name">
         </navbar>
 
         <ion-content>
-
-            <!-- Temperature -->
-            <div>
-                <h1>Titre</h1>
-            </div>
-
             <!-- Grid info localization -->
             <ion-grid>
                 <ion-row>
@@ -28,14 +22,14 @@
                 </ion-row>
 
                 <ion-row>
-                    <ion-col>
-                        ion-col
+                    <ion-col v-if="currentWeather">
+                        <p>{{ currentWeather.main.humidity + '%' }}</p>
                     </ion-col>
-                    <ion-col>
-                        ion-col
+                    <ion-col v-if="currentWeather">
+                        <p>{{ currentWeather.main.temp + '°C' }}</p>
                     </ion-col>
-                    <ion-col>
-                        ion-col
+                    <ion-col v-if="currentWeather">
+                        <p>{{ currentWeather.wind.speed + 'km/h' }}</p>
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -80,6 +74,7 @@
     import { defineComponent } from 'vue';
 
     import Navbar from './Navbar';
+    import weatherService from "@/services/weatherService";
 
     export default defineComponent({
         components: {
@@ -90,6 +85,11 @@
             IonContent,
             Navbar
         },
+        data(){
+            return{
+                currentWeather : null
+            }
+        },
         setup() {
             return {
                 starOutline,
@@ -97,6 +97,16 @@
                 add,
                 thermometer
             }
+        },
+        mounted() {
+            //Get the localization
+            navigator.geolocation.getCurrentPosition( async position => {
+                const { latitude, longitude } = position.coords;
+                //API call
+                this.currentWeather = await weatherService.getPosition(latitude,longitude)
+            });
+
+
         }
     });
 

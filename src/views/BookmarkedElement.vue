@@ -35,7 +35,7 @@
         IonCol,
         IonRow,
         IonGrid,
-        alertController
+        alertController, toastController
     } from '@ionic/vue'
 
     import { trash, create } from 'ionicons/icons'
@@ -80,6 +80,7 @@
                         doc.ref.delete();
                     });
                 });
+                this.PrintToast('Element deleted')
             },
             async modifyBookmark() {
                 const alert = await alertController
@@ -113,14 +114,23 @@
                                                 doc.ref.set({name : alertData.name});
                                             });
                                         });
+                                        this.$emit('clicked');
                                     }
-                                    console.log(alertData.name)
+                                    //console.log(alertData.name)
                                 },
                             },
                         ],
                     });
                 return alert.present();
             },
+            async PrintToast(msg){
+                const toast = await toastController
+                    .create({
+                        message: msg,
+                        duration: 2000
+                    })
+                return toast.present();
+            }
         },
         props:{
             city : String,
