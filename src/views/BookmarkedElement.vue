@@ -16,25 +16,41 @@
                             <ion-icon slot="icon-only" :icon="trash"></ion-icon>
                         </ion-button>
                     </ion-col>
+                    <ion-col>
+                        <ion-button color="danger" @click="modifyBookmark">
+                            <ion-icon slot="icon-only" :icon="create"></ion-icon>
+                        </ion-button>
+                    </ion-col>
                 </ion-row>
             </ion-grid>
         </ion-card-content>
     </ion-card>
 </template>
 
-<script lang="ts">
+<script>
     import {
         IonCard,
         IonCardContent,
         IonButton,
         IonCol,
         IonRow,
-        IonGrid
+        IonGrid,
+        alertController
     } from '@ionic/vue'
 
-    import { trash } from 'ionicons/icons'
+    import { trash, create } from 'ionicons/icons'
+
+    import firebase from "firebase/app";
+    import "firebase/firestore";
+    import { DATABASE_CONFIGURATION } from '../config.js';
+
+    if (firebase.apps.length === 0) {
+        firebase.initializeApp(DATABASE_CONFIGURATION);
+    }
 
     import { defineComponent } from 'vue';
+
+    export const db = firebase.firestore()
 
     export default defineComponent ({
         name: "BookmarkedElement",
@@ -44,13 +60,51 @@
             IonButton,
             IonCol,
             IonRow,
-            IonGrid
+            IonGrid,
         },
         setup() {
-            return { trash }
+            return { trash, create }
         },
         methods:{
-            deleteBookmark(){'hello'}
+            deleteBookmark(){
+                const deleteCity = db.collection('cities').where('name','==',this.city);
+                deleteCity.get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        doc.ref.delete();
+                    });
+                });
+            },
+            async modifyBookmark() {
+                const alert = await alertController
+                    .create({
+                        cssClass: 'my-custom-class',
+                        header: 'Modification',
+                        message: 'Modify this element',
+                        inputs: [
+                            {
+                                value : this.city,
+                                name: 'name',
+                                type: 'text'
+                            }],
+                        buttons: [
+                            {
+                                text: 'Cancel',
+                                role: 'cancel',
+                                cssClass: 'secondary',
+                                handler: blah => {
+                                    console.log('Confirm Cancel:', blah)
+                                },
+                            },
+                            {
+                                text: 'Okay',
+                                handler: (alertData) => {
+                                    console.log(alertData.name)
+                                },
+                            },
+                        ],
+                    });
+                return alert.present();
+            },
         },
         props:{
             city : String,

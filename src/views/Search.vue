@@ -6,11 +6,21 @@
     <ion-button @click="addCity">Ajouter</ion-button>
 </template>
 
-<script lang="ts">
+<script>
     import {defineComponent} from "vue";
     import {IonSearchbar, IonButton, toastController } from "@ionic/vue";
     import Navbar from "@/views/Navbar.vue";
     import weatherService from "@/services/weatherService";
+
+    import firebase from "firebase/app";
+    import "firebase/firestore";
+    import { DATABASE_CONFIGURATION } from '../config.js';
+
+    if (firebase.apps.length === 0) {
+        firebase.initializeApp(DATABASE_CONFIGURATION);
+    }
+
+    export const db = firebase.firestore()
 
     export default defineComponent ({
         name: "Search",
@@ -26,15 +36,23 @@
             IonButton
         },
         methods : {
-            onChange(e: any){
+            onChange(e){
                 this.city = e.detail.value;
             },
             async addCity(){
                 this.currentWeather = await weatherService.getCityName(this.city);
-                    const msg = await this.currentWeather.cod === '200' ? 'Votre saisie a bien été enregistrée' : 'erreur rencontrée';
-                    this.PrintToast(msg);
+                if(this.currentWeather.cod === '200'){
+                    db.collection('cities')
+                        .add({name : this.city})
+                        .then(() => {
+                        this.PrintToast('your registration has been recorded');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+                } else this.PrintToast('error encountered');
+
             },
-            async PrintToast(msg: string){
+            async PrintToast(msg){
                 const toast = await toastController
                     .create({
                         message: msg,
