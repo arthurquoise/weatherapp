@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <Navbar :title="'bookmarks'"> </Navbar>
-        <ion-button @click="log">
+        <ion-button>
             <ion-icon slot="icon-only"></ion-icon>
         </ion-button>
         <ion-content v-if="cities.length > 0">
@@ -62,8 +62,8 @@
         },
 
         methods: {
-            log(){
-                console.log(this.cities)
+            update(){
+                this.$forceUpdate();
             }
         }
     });

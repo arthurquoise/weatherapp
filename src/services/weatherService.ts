@@ -4,5 +4,5 @@ export default {
         const data = await apiCall.json();
         console.log(data);
         return data;
-    }
+    },
 }

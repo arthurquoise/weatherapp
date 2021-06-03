@@ -49,6 +49,7 @@
     }
 
     import { defineComponent } from 'vue';
+    import weatherService from "@/services/weatherService";
 
     export const db = firebase.firestore()
 
@@ -65,7 +66,13 @@
         setup() {
             return { trash, create }
         },
+        data() {
+            return {
+                currentWeather : { cod : null }
+            }
+        },
         methods:{
+            //Delete an element in
             deleteBookmark(){
                 const deleteCity = db.collection('cities').where('name','==',this.city);
                 deleteCity.get().then(function(querySnapshot) {
@@ -97,7 +104,16 @@
                             },
                             {
                                 text: 'Okay',
-                                handler: (alertData) => {
+                                handler: async (alertData) => {
+                                    this.currentWeather = await weatherService.getCityName(alertData.name);
+                                    if(this.currentWeather.cod === '200'){
+                                        const updateCity = db.collection('cities').where('name','==',this.city);
+                                        updateCity.get().then(function(querySnapshot) {
+                                            querySnapshot.forEach(function(doc) {
+                                                doc.ref.set({name : alertData.name});
+                                            });
+                                        });
+                                    }
                                     console.log(alertData.name)
                                 },
                             },
